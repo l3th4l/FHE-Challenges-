@@ -67,8 +67,9 @@ class Challenge():
         #encrypt the first message 
         self.A1, self.B1 = self.G1.encrypt(list(message)) 
     
-        #add the first messsage with the flag     
-        message_plus_flag = bytes(x + y for x, y in zip(message, flag))
+        #add the first messsage with the flag
+        
+        message_plus_flag = bytes([(x + y) % self.G1.p for x, y in zip(message, flag)])
 
         #encrypt(message + flag) 
         self.A2, self.B2 = self.G1.encrypt(list(message_plus_flag)) 
