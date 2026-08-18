@@ -28,13 +28,14 @@ def irreducible_poly_mod_q(q, max_order, n):
 
     orders = list(dict.fromkeys(primefac(q-1)))
 
-    _n = n + 1
+    _n = n
     _order_id = 0
 
     #for each order < max_order, find  k = order elements with order = order in Z_q 
-    roots = []
-    while _n > 0:
+    roots = [1]
+    while _n > 1:
         order = orders[_order_id]
+        assert order < max_order
         c = 2 
         for c in range(2, q):
             if pow(c, order, q) == 1:
@@ -45,6 +46,7 @@ def irreducible_poly_mod_q(q, max_order, n):
 
         _n -= (order - 1)
         _order_id += 1 
+
 
     R = PolynomialRing(ZZ, 'x')
     R_q = PolynomialRing(Zmod(q), 'x')
@@ -68,16 +70,17 @@ if __name__ == "__main__":
     print("q = ", q) 
 
     #find a polynomial 
-    f = irreducible_poly_mod_q(q, max_order = 11, n = 9)
+    f = irreducible_poly_mod_q(q, max_order = 4, n = 4)
 
-    print(f"f(x) = {f}\n")
+    print("f(x) = ", f)
 
-    print(f"f(x) = {R_q(f)} (mod {q})\n")
+    print(f"f(x) = {R_q(f)} (mod {q})")
 
-    print(f"[factorized] f(x) = {R_q(f).factor()} (mod {q})\n")
+    print(f"[factorized] f(x) = {R_q(f).factor()} (mod {q})")
 
-    print("\n=== Orders of roots ===\n")
+    print("\n\n=== Orders of roots ===\n\n")
 
     for root, _, in R_q(f).roots():
-        print(f"root : {root}, order : {Zmod(q)(root).multiplicative_order()}")
+        print(root)
+        print(f"root : {root}, order : {Zmod(q)(root).multiplicative_order()} \n")
 
